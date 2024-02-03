@@ -1,3 +1,4 @@
+import requests
 from clarifai_grpc.channel.clarifai_channel import ClarifaiChannel
 from clarifai_grpc.grpc.api import resources_pb2, service_pb2, service_pb2_grpc
 from clarifai_grpc.grpc.api.status import status_code_pb2
@@ -16,7 +17,7 @@ APP_ID = 'main'
 # Change these to whatever model and image URL you want to use
 MODEL_ID = 'food-item-recognition'
 MODEL_VERSION_ID = '1d5fd481e0cf4826aa72ec3ff049e044'
-IMAGE_URL = 'https://www.recipetineats.com/wp-content/uploads/2022/11/Apple-Pie_8.jpg'
+IMAGE_URL = 'https://jesspryles.com/wp-content/uploads/2020/04/untitled-2-1536x960.jpg'
 
 ############################################################################
 # YOU DO NOT NEED TO CHANGE ANYTHING BELOW THIS LINE TO RUN THIS EXAMPLE
@@ -57,3 +58,18 @@ output = post_model_outputs_response.outputs[0]
 print("Predicted concepts:")
 for concept in output.data.concepts:
     print("%s %.2f" % (concept.name, concept.value))
+best_concept = max(output.data.concepts, key=lambda x: x.value)
+if best_concept:
+    # Use the best predicted concept as the query for the nutrition API
+    query = best_concept.name
+
+    # Call the nutrition API with the query
+    api_url = 'https://api.api-ninjas.com/v1/nutrition?query={}'.format(query)
+    response = requests.get(api_url, headers={'X-Api-Key': 'IUWRgqfCgZE9LKNKXfzEKA==G6bLKD0vWAh5GcTW'})
+    
+    if response.status_code == requests.codes.ok:
+        print(response.text)
+    else:
+        print("Error:", response.status_code, response.text)
+else:
+    print("No predicted concept available.")
