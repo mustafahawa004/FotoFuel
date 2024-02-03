@@ -1,0 +1,21 @@
+/* src/components/FileUpload.css */
+
+.file-upload-container {
+    text-align: center;
+  }
+  
+  .nice-button {
+    background-color: #007BFF; /* Blue color */
+    color: #FFFFFF; /* White text */
+    padding: 10px 20px; /* Adjust padding for the button */
+    font-size: 16px; /* Adjust font size */
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth color transition on hover */
+  }
+  
+  .nice-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  

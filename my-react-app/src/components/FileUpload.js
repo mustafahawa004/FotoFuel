@@ -1,15 +1,16 @@
 // src/components/FileUpload.js
 import React, { useState } from 'react';
+import './FileUpload.css';
 
 const FileUpload = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [fileUrl, setFileUrl] = useState(null);
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
-    setFileUrl(URL.createObjectURL(file));
-  };
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [fileUrl, setFileUrl] = useState(null);
+  
+    const handleFileChange = (event) => {
+      const file = event.target.files[0];
+      setSelectedFile(file);
+      setFileUrl(URL.createObjectURL(file));
+    };
 
   const handleUpload = () => {
     // Perform file upload logic here (e.g., send the file to a server).
@@ -20,10 +21,12 @@ const FileUpload = () => {
   };
 
   return (
-    <div>
-      <img src={fileUrl || '/images/your_logo.png'} alt="Logo" style={{ width: '150px', height: '150px' }} />
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={handleUpload}>Upload</button>
+    <div className="file-upload-container">
+      <img src={fileUrl || '/images/your_logo.png'} alt="Logo" className="file-upload-image" />
+      <input type="file" onChange={handleFileChange} className="file-upload-input" />
+      <button onClick={handleUpload} className="nice-button">
+        Upload
+      </button>
     </div>
   );
 };
