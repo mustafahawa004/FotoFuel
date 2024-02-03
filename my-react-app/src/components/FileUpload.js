@@ -3,14 +3,14 @@ import React, { useState } from 'react';
 import './FileUpload.css';
 
 const FileUpload = () => {
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [fileUrl, setFileUrl] = useState(null);
-  
-    const handleFileChange = (event) => {
-      const file = event.target.files[0];
-      setSelectedFile(file);
-      setFileUrl(URL.createObjectURL(file));
-    };
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [fileUrl, setFileUrl] = useState(null);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+    setFileUrl(URL.createObjectURL(file));
+  };
 
   const handleUpload = () => {
     // Perform file upload logic here (e.g., send the file to a server).
@@ -22,11 +22,24 @@ const FileUpload = () => {
 
   return (
     <div className="file-upload-container">
-      <img src={fileUrl || '/images/your_logo.png'} alt="Logo" className="file-upload-image" />
-      <input type="file" onChange={handleFileChange} className="file-upload-input" />
+      <label htmlFor="file-input" className="file-upload-label">
+        <div className="file-upload-box">
+          <span className="file-upload-text">Choose a file</span>
+          <span className="file-upload-arrow">&#8595;</span>
+        </div>
+      </label>
+      <input
+        id="file-input"
+        type="file"
+        onChange={handleFileChange}
+        className="file-upload-input"
+      />
       <button onClick={handleUpload} className="nice-button">
         Upload
       </button>
+      {fileUrl && (
+        <img src={fileUrl} alt="Uploaded File" className="file-upload-preview" />
+      )}
     </div>
   );
 };

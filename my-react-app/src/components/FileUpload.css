@@ -1,21 +1,67 @@
 /* src/components/FileUpload.css */
 
+/* src/components/FileUpload.css */
+
 .file-upload-container {
     text-align: center;
   }
   
-  .nice-button {
-    background-color: #007BFF; /* Blue color */
-    color: #FFFFFF; /* White text */
-    padding: 10px 20px; /* Adjust padding for the button */
-    font-size: 16px; /* Adjust font size */
-    border: none;
-    border-radius: 5px; /* Rounded corners */
+  .file-upload-label {
+    display: inline-block;
     cursor: pointer;
-    transition: background-color 0.3s ease; /* Smooth color transition on hover */
+  }
+  
+  .file-upload-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #007BFF;
+    border-radius: 10px;
+    padding: 20px;
+    width: 200px; /* Adjust the width as needed */
+    height: 150px; /* Adjust the height as needed */
+    transition: border-color 0.3s ease; /* Smooth border color transition on hover */
+  }
+  
+  .file-upload-box:hover {
+    border-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  .file-upload-text {
+    font-size: 16px;
+  }
+  
+  .file-upload-arrow {
+    font-size: 20px;
+    margin-top: 5px;
+  }
+  
+  .file-upload-input {
+    display: none;
+  }
+  
+  .nice-button {
+    background-color: #007BFF;
+    color: #FFFFFF;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
   }
   
   .nice-button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #0056b3;
   }
+  
+  .file-upload-preview {
+    width: 150px;
+    height: 150px;
+    margin-top: 10px;
+    border-radius: 5px;
+    object-fit: cover;
+  }
+  
   
