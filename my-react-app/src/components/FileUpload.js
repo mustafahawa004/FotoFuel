@@ -1,5 +1,6 @@
 // src/components/FileUpload.js
 import React, { useState } from 'react';
+import './FileUpload.css';
 
 const FileUpload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -20,10 +21,25 @@ const FileUpload = () => {
   };
 
   return (
-    <div>
-      <img src={fileUrl || '/images/your_logo.png'} alt="Logo" style={{ width: '150px', height: '150px' }} />
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={handleUpload}>Upload</button>
+    <div className="file-upload-container">
+      <label htmlFor="file-input" className="file-upload-label">
+        <div className="file-upload-box">
+          <span className="file-upload-text">Choose a file</span>
+          <span className="file-upload-arrow">&#8595;</span>
+        </div>
+      </label>
+      <input
+        id="file-input"
+        type="file"
+        onChange={handleFileChange}
+        className="file-upload-input"
+      />
+      <button onClick={handleUpload} className="nice-button">
+        Upload
+      </button>
+      {fileUrl && (
+        <img src={fileUrl} alt="Uploaded File" className="file-upload-preview" />
+      )}
     </div>
   );
 };

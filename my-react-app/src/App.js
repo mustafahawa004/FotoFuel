@@ -1,22 +1,18 @@
-import logo from './logo.svg';
+// src/App.js
+import React from 'react';
 import './App.css';
+import FileUpload from './components/FileUpload';
+
+const logoPath = '/logo/logo'; // Base path for logo files (update based on your project structure)
+
+const getLogoPath = (fileType) => `${logoPath}.${fileType}`;
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <img src={getLogoPath('png')} alt="Logo" className="App-logo" />
+        <FileUpload />
       </header>
     </div>
   );
