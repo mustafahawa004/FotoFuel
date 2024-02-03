@@ -5,6 +5,7 @@
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+  margin-bottom: 20px; /* Add margin to create space between logo and other elements */
 }
 
 @media (prefers-reduced-motion: no-preference) {
