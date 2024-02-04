@@ -22,32 +22,29 @@ const FileUpload = ({ onSuccess }) => {
     }
 
     const formData = new FormData();
-    formData.append('file', selectedFile);
+    formData.append('file', selectedFile); // Ensure this key matches the one expected by Flask
 
     try {
-      const response = await fetch('http://localhost:5000/upload_image', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Accept': 'application/json',
-        },
-      });
-      const data = await response.json();
-
-      if (response.ok) {
-        setUploadStatus('Upload successful!');
-        console.log('Server response:', data);
-        // Use onSuccess callback if it's provided
-        onSuccess && onSuccess(data);
-        navigate('/success');
-      } else {
-        setUploadStatus('Upload failed: ' + (data.error || 'Unknown error'));
+        const response = await fetch('http://localhost:5000/process_image', { // Updated URL
+          method: 'POST',
+          body: formData,
+          // Removed headers to allow browser to set Content-Type with boundary
+        });
+        const data = await response.json();
+  
+        if (response.ok) {
+          setUploadStatus('Upload successful!');
+          console.log('Server response:', data);
+          onSuccess && onSuccess(data);
+          navigate('/success');
+        } else {
+          setUploadStatus('Upload failed: ' + (data.error || 'Unknown error'));
+        }
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        setUploadStatus('Upload failed: ' + error.message);
       }
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      setUploadStatus('Upload failed: ' + error.message);
-    }
-  };
+    };
 
   return (
     <div className="file-upload-container">

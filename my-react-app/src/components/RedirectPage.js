@@ -7,16 +7,20 @@ const RedirectPage = ({ imageUrl }) => {
   useEffect(() => {
     const processImage = async () => {
       try {
-        const response = await fetch('http://localhost:5000/process_image', {
+        const formData = new FormData();
+        formData.append('image', imageUrl);
+    
+        const response = await fetch('http://localhost:5000/api/get_food_data', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ image_url: imageUrl }),
+          body: formData,
         });
-
-        const data = await response.json();
-        setResult(data.result);
+    
+        if (response.ok) {
+          const data = await response.json();
+          setResult(data.nutritional_info || ''); // Ensure nutritional_info is available or provide a default value
+        } else {
+          console.error('Error processing image:', response.statusText);
+        }
       } catch (error) {
         console.error('Error processing image:', error);
       }
@@ -29,7 +33,7 @@ const RedirectPage = ({ imageUrl }) => {
     <div>
       <h2>Redirect Page</h2>
       <img src={imageUrl} alt="Redirected Image" style={{ width: '300px', height: '300px' }} />
-      {result && <p>Result from datacollection.py: {result}</p>}
+      {result && <p>Nutritional Info: {result}</p>}
     </div>
   );
 };
