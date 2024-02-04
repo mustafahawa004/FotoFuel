@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './FileUpload.css';
 
 // Accept props in the component function
-const FileUpload = ({ onSuccess }) => { // Destructure onSuccess from props
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [uploadStatus, setUploadStatus] = useState('');
+const FileUpload = ({ onSuccess }) => {
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [uploadStatus, setUploadStatus] = useState('');
+    const navigate = useNavigate();
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -37,6 +39,7 @@ const FileUpload = ({ onSuccess }) => { // Destructure onSuccess from props
         console.log('Server response:', data);
         // Use onSuccess callback if it's provided
         onSuccess && onSuccess(data);
+        navigate('/success');
       } else {
         setUploadStatus('Upload failed: ' + (data.error || 'Unknown error'));
       }
