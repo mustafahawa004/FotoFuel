@@ -51,3 +51,15 @@ body {
 .nice-button:hover {
   background-color: #673679; /* Darker violet on hover */
 }
+
+.app-container {
+  min-height: 150vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.white-horizontal-bar {
+  background-color: #ffffff;
+  height: 20px;
+  width: 100%;
+}
