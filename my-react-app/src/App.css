@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Belleza&display=swap'); /* Imports Belleza Font*/
+
 body {
   margin: 0;
   padding: 0;
@@ -88,10 +90,33 @@ body {
 
 .translate-left {
   transform: translateX(-100%); /* Translate the element 100% to the left */
-  transition: transform 0.5s ease-in; /* Apply a transition effect */
+  transition: transform 0.6s ease-in; /* Apply a transition effect */
 }
 
 .translate-right {
   transform: translateX(0%);
-  transition: transform 0.6s ease;
+  transition: transform 0.6s ease-in;
+}
+
+.about-text {
+  position: absolute; /* Position the text absolutely */
+  top: 65%; /* Align the top of the text to the vertical center */
+  right: 20px; /* Adjust the distance from the right edge */
+  transform: translateY(-50%); /* Adjust the vertical alignment to center */
+  text-align: center; /* Align text to the right */
+  font-family: 'Belleza', sans-serif; /* Use Belleza font */
+  max-width: 40%;
+  opacity: 0; /* Initially hide the text */
+  animation: fade-in 1s ease forwards; /* Apply fade-in animation */
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0; /* Start with opacity 0 */
+    transform: translateY(-50%) translateX(20px); /* Move slightly to the right */
+  }
+  to {
+    opacity: 1; /* End with opacity 1 */
+    transform: translateY(-50%); /* Move back to original position */
+  }
 }
