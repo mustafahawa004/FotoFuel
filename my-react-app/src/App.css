@@ -99,6 +99,7 @@ body {
 }
 
 .about-text {
+  color:#000000;
   position: absolute; /* Position the text absolutely */
   top: 65%; /* Align the top of the text to the vertical center */
   right: 20px; /* Adjust the distance from the right edge */
