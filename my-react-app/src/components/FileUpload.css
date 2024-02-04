@@ -18,7 +18,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border: 2px dashed #007BFF;
+    border: 2px dashed #8f4ca8;
     border-radius: 10px;
     padding: 20px;
     width: 200px; /* Adjust the width as needed */
@@ -27,7 +27,7 @@
   }
   
   .file-upload-box:hover {
-    border-color: #0056b3; /* Darker blue on hover */
+    border-color: #673679; /* Darker blue on hover */
   }
   
   .file-upload-text {
@@ -39,7 +39,7 @@
   }
   
   .nice-button {
-    background-color: #007BFF; /* Blue color */
+    background-color: #8f4ca8; /* Violet color */
     color: #FFFFFF; /* White text */
     padding: 10px 20px; /* Adjust padding for the button */
     font-size: 16px; /* Adjust font size */
@@ -51,7 +51,7 @@
   }
   
   .nice-button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #673679; /* Darker violet on hover */
   }
   
   .file-upload-preview {
