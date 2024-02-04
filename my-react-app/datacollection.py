@@ -17,7 +17,6 @@ USER_ID = 'clarifai'
 APP_ID = 'main'
 MODEL_ID = 'food-item-recognition'
 MODEL_VERSION_ID = '1d5fd481e0cf4826aa72ec3ff049e044'
-IMAGE_URL = 'https://jesspryles.com/wp-content/uploads/2020/04/untitled-2-1536x960.jpg'
 
 ############################################################################
 # YOU DO NOT NEED TO CHANGE ANYTHING BELOW THIS LINE TO RUN THIS EXAMPLE
