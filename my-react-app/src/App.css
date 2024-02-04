@@ -53,13 +53,13 @@ body {
 }
 
 .app-container {
-  min-height: 150vh;
+  min-height: 200vh;
   display: flex;
   flex-direction: column;
 }
 
 .white-horizontal-bar {
   background-color: #ffffff;
-  height: 20px;
+  height: 100px;
   width: 100%;
 }
