@@ -58,8 +58,30 @@ body {
   flex-direction: column;
 }
 
-.white-horizontal-bar {
-  background-color: #ffffff;
+.violet-horizontal-bar {
+  background-color: #b8b2e8;
+  display: flex; /* Use flexbox */
+  justify-content: space-around; /* Spread out the buttons evenly */
+  align-items: center; /* Align items vertically */
   height: 100px;
   width: 100%;
+}
+
+.how-to-use-button,
+.about-button,
+.contact-us-button {
+  background-color: #78578a; /* Violet color */
+  color: #FFFFFF; /* White text */
+  padding: 10px 20px; /* Adjust padding for the button */
+  font-size: 16px; /* Adjust font size */
+  border: none;
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth color transition on hover */
+}
+
+.how-to-use-button:hover,
+.about-button:hover,
+.contact-us-button:hover {
+  background-color: #673679; /* Darker violet on hover */
 }
