@@ -37,9 +37,6 @@ const FileUpload = () => {
       <button onClick={handleUpload} className="nice-button">
         Upload
       </button>
-      {fileUrl && (
-        <img src={fileUrl} alt="Uploaded File" className="file-upload-preview" />
-      )}
     </div>
   );
 };
