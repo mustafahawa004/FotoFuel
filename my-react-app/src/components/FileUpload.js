@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import './FileUpload.css';
 
-const FileUpload = () => {
+// Accept props in the component function
+const FileUpload = ({ onSuccess }) => { // Destructure onSuccess from props
   const [selectedFile, setSelectedFile] = useState(null);
-  const [fileUrl, setFileUrl] = useState(null);
   const [uploadStatus, setUploadStatus] = useState('');
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
-    setFileUrl(URL.createObjectURL(file));
+    // Optionally set a URL for the file preview, if needed
+    // setFileUrl(URL.createObjectURL(file));
   };
 
   const handleUpload = async () => {
@@ -24,16 +25,20 @@ const FileUpload = () => {
     try {
       const response = await fetch('http://localhost:5000/upload_image', {
         method: 'POST',
-        body: formData, // No headers needed, fetch adds the correct multipart/form-data header automatically
+        body: formData,
+        headers: {
+          'Accept': 'application/json',
+        },
       });
       const data = await response.json();
-      
+
       if (response.ok) {
         setUploadStatus('Upload successful!');
         console.log('Server response:', data);
-        // Here you can also update the state to pass this response to another component or trigger a redirect
+        // Use onSuccess callback if it's provided
+        onSuccess && onSuccess(data);
       } else {
-        setUploadStatus('Upload failed: ' + data.error);
+        setUploadStatus('Upload failed: ' + (data.error || 'Unknown error'));
       }
     } catch (error) {
       console.error('Error uploading file:', error);
