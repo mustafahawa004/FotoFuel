@@ -15,7 +15,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #cfc5f7;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -26,7 +26,7 @@
 }
 
 .App-link {
-  color: #61dafb;
+  color: #8f4ca8;
 }
 
 @keyframes App-logo-spin {
@@ -39,7 +39,7 @@
 }
 
 .nice-button {
-  background-color: #007BFF; /* Blue color */
+  background-color: #8f4ca8; /* Violet color */
   color: #FFFFFF; /* White text */
   padding: 10px 20px; /* Adjust padding for the button */
   font-size: 16px; /* Adjust font size */
@@ -50,5 +50,5 @@
 }
 
 .nice-button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #673679; /* Darker violet on hover */
 }
