@@ -15,16 +15,20 @@ UPLOAD_FOLDER = os.path.join(BASE_DIR, '..', 'uploads')
 # Ensure the upload folder exists
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+@app.route('/')
+def home():
+    return jsonify({'message': 'Hello, this is the home page!'})
+
 @app.route('/process_image', methods=['POST'])
 def process_image():
     try:
         image_url = request.json['image_url']
-        # Adjust the path to your datacollection.py script accordingly
         datacollection_path = os.path.join(BASE_DIR, 'datacollection.py')
         result = subprocess.run(['python', datacollection_path, image_url], capture_output=True, text=True)
-        return jsonify({'result': result.stdout})
+        nutritional_info = result.stdout  # Extract nutritional info from the result
+        return jsonify({'nutritional_info': nutritional_info}), 200
     except Exception as e:
-        return jsonify({'error': str(e)})
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/upload_image', methods=['POST'])
 def upload_image():
@@ -36,7 +40,14 @@ def upload_image():
     
     filepath = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(filepath)
-    return jsonify({'result': 'File uploaded successfully'}), 200
+
+    try:
+        datacollection_path = os.path.join(BASE_DIR, 'datacollection.py')
+        result = subprocess.run(['python', datacollection_path, filepath], capture_output=True, text=True)
+        nutritional_info = result.stdout  # Extract nutritional info from the result
+        return jsonify({'result': 'File uploaded successfully', 'nutritional_info': nutritional_info}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(port=5000)
