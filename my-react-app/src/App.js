@@ -11,8 +11,19 @@ const getLogoPath = (fileType) => `${logoPath}.${fileType}`;
 
 function App() {
   const [uploadResponse, setUploadResponse] = useState(null);
+  const [isTranslated, setIsTranslated] = useState(false);
+  const [direction, setDirection] = useState('left'); // Initial direction is left
+
   const handleUploadSuccess = (data) => {
     setUploadResponse(data);
+  };
+  const handleTranslate = () => {
+    setIsTranslated(true); // Toggle translation state
+    setDirection('left'); // Always set the direction to left when clicking on About or Contact Us
+  }; 
+  const handleGoHome = () => {
+    setIsTranslated(true); // Set translation state to true
+  setDirection('right'); // Always set the direction to right when clicking on Home
   };
   return (
     <Router>
@@ -21,13 +32,16 @@ function App() {
 
       <div className="violet-horizontal-bar">
         {/* Buttons */}
-          <Link to="/" className="how-to-use-button">Home Page</Link>
-          <Link to="/about" className="about-button">About</Link>
-          <Link to="/contact" className="contact-us-button">Contact Us</Link>
+        <Link to="/" className="how-to-use-button" onClick={handleGoHome}>Home Page</Link>
+        <Link to="/about" className="about-button" onClick={handleTranslate}>About</Link>
+        <Link to="/contact" className="contact-us-button" onClick={handleTranslate}>Contact Us</Link>
         </div>
 
         <header className="App-header">
-          <img src={getLogoPath('png')} alt="Logo" className="App-logo" />
+          <img 
+          src={getLogoPath('png')} 
+          alt="Logo" 
+          className={`App-logo ${isTranslated ? `translate-${direction}` : ''}`} />
           {/* The Routes component replaces the Switch component from v5 */}
           <Routes>
             <Route path="/" element={
