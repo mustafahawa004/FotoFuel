@@ -1,12 +1,10 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, url_for
 from flask_cors import CORS
 import os
-import base64
 import requests
 from clarifai_grpc.channel.clarifai_channel import ClarifaiChannel
 from clarifai_grpc.grpc.api import resources_pb2, service_pb2, service_pb2_grpc
 from clarifai_grpc.grpc.api.status import status_code_pb2
-import subprocess  # Remember to import subprocess if you're using it
 
 app = Flask(__name__)
 CORS(app)
@@ -22,7 +20,7 @@ MODEL_VERSION_ID = 'dfebc169854e429086aceb8368662641'
 API_NINJA_API_KEY = 'IUWRgqfCgZE9LKNKXfzEKA==G6bLKD0vWAh5GcTW'
 
 # Define the upload folder path relative to the base directory
-UPLOAD_FOLDER = os.path.join(BASE_DIR, '..', 'uploads')
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static')
 
 # Ensure the upload folder exists
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -35,27 +33,32 @@ def home():
 def process_image():
     try:
         uploaded_file = request.files['image']
-        uploaded_file.save('temp_image.jpg')  # Save temporarily
+        filepath = os.path.join(UPLOAD_FOLDER, 'temp_image.jpg')
+        uploaded_file.save(filepath)
 
-        # Setup Clarifai connection and process image
+        image_url = url_for('static', filename='temp_image.jpg', _external=True)
+        print(f"Image URL: {image_url}")
+
         channel = ClarifaiChannel.get_grpc_channel()
         stub = service_pb2_grpc.V2Stub(channel)
         metadata = (('authorization', 'Key ' + PAT),)
 
-        with open('temp_image.jpg', "rb") as image_file:
-            base64_image = base64.b64encode(image_file.read()).decode('utf-8')
+        print("Before Clarifai request")
 
         post_model_outputs_response = stub.PostModelOutputs(
             service_pb2.PostModelOutputsRequest(
                 user_app_id=resources_pb2.UserAppIDSet(user_id=USER_ID, app_id=APP_ID),
                 model_id=MODEL_ID,
                 version_id=MODEL_VERSION_ID,
-                inputs=[resources_pb2.Input(data=resources_pb2.Data(image=resources_pb2.Image(base64=base64_image)))]
+                inputs=[resources_pb2.Input(data=resources_pb2.Data(image=resources_pb2.Image(url=image_url)))]
             ),
             metadata=metadata
         )
+        print(f"Clarifai API Response: {post_model_outputs_response}")
+        print("After Clarifai request")
 
         if post_model_outputs_response.status.code != status_code_pb2.SUCCESS:
+            print(f"Clarifai API error: {post_model_outputs_response.status.description}")
             return jsonify({"error": "Failed to process image"}), 500
 
         # Extract the best concept
@@ -73,8 +76,11 @@ def process_image():
         else:
             return jsonify({"error": f"Failed to fetch nutrition data. API responded with status code {response.status_code}"}), response.status_code
 
+    except FileNotFoundError as e:
+        return jsonify({"error": f"File not found: {e}"}), 400
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        print(f"Unexpected error: {e}")
+        return jsonify({"error": f"Unexpected error: {e}"}), 500
     
 @app.route('/upload_image', methods=['POST'])
 def upload_image():
@@ -83,17 +89,8 @@ def upload_image():
     file = request.files['file']
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
-    
     filepath = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(filepath)
 
-    try:
-        datacollection_path = os.path.join(BASE_DIR, 'datacollection.py')
-        result = subprocess.run(['python', datacollection_path, filepath], capture_output=True, text=True)
-        nutritional_info = result.stdout  # Extract nutritional info from the result
-        return jsonify({'result': 'File uploaded successfully', 'nutritional_info': nutritional_info}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(host='0.0.0.0', port=5000)
