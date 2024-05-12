@@ -25,7 +25,7 @@ const FileUpload = ({ onSuccess }) => {
     formData.append('file', selectedFile); // Ensure this key matches the one expected by Flask
 
     try {
-        const response = await fetch('http://localhost:5000/process_image', { // Updated URL
+        const response = await fetch('http://localhost:5000/upload_image', { // Updated URL
           method: 'POST',
           body: formData,
           // Removed headers to allow browser to set Content-Type with boundary

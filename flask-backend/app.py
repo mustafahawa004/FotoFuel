@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, url_for
 from flask_cors import CORS
+from clarifai.client.model import Model
 import os
 import requests
 from clarifai_grpc.channel.clarifai_channel import ClarifaiChannel
@@ -15,7 +16,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PAT = 'd301c71a42504160b90ef870c7f410dc'
 USER_ID = 'clarifai'
 APP_ID = 'main'
-MODEL_ID = 'food-item-v1-recognition'
 MODEL_VERSION_ID = 'dfebc169854e429086aceb8368662641'
 API_NINJA_API_KEY = 'IUWRgqfCgZE9LKNKXfzEKA==G6bLKD0vWAh5GcTW'
 
@@ -25,44 +25,24 @@ UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static')
 # Ensure the upload folder exists
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+model = Model(url=f"https://clarifai.com/clarifai/main/models/food-item-recognition", pat=PAT)
+
 @app.route('/')
 def home():
     return jsonify({'message': 'Hello, this is the home page!'})
 
-@app.route('/api/get_food_data', methods=['POST'])
+def predict_by_filepath(filepath):
+    # Predict using file path
+    model_prediction = model.predict_by_filepath(filepath, input_type="image")
+    return model_prediction
+
+@app.route('/api/get_food_data', methods=['GET', 'POST'])
 def process_image():
     try:
-        uploaded_file = request.files['image']
-        filepath = os.path.join(UPLOAD_FOLDER, 'temp_image.jpg')
-        uploaded_file.save(filepath)
-
-        image_url = url_for('static', filename='temp_image.jpg', _external=True)
-        print(f"Image URL: {image_url}")
-
-        channel = ClarifaiChannel.get_grpc_channel()
-        stub = service_pb2_grpc.V2Stub(channel)
-        metadata = (('authorization', 'Key ' + PAT),)
-
-        print("Before Clarifai request")
-
-        post_model_outputs_response = stub.PostModelOutputs(
-            service_pb2.PostModelOutputsRequest(
-                user_app_id=resources_pb2.UserAppIDSet(user_id=USER_ID, app_id=APP_ID),
-                model_id=MODEL_ID,
-                version_id=MODEL_VERSION_ID,
-                inputs=[resources_pb2.Input(data=resources_pb2.Data(image=resources_pb2.Image(url=image_url)))]
-            ),
-            metadata=metadata
-        )
-        print(f"Clarifai API Response: {post_model_outputs_response}")
-        print("After Clarifai request")
-
-        if post_model_outputs_response.status.code != status_code_pb2.SUCCESS:
-            print(f"Clarifai API error: {post_model_outputs_response.status.description}")
-            return jsonify({"error": "Failed to process image"}), 500
+        model_prediction = predict_by_filepath(filepath)
 
         # Extract the best concept
-        best_concept = max(post_model_outputs_response.outputs[0].data.concepts, key=lambda c: c.value)
+        best_concept = max(model_prediction.outputs[0].data.concepts, key=lambda c: c.value)
         food_item = best_concept.name
 
         # Fetch nutrition data based on identified food item
@@ -84,6 +64,7 @@ def process_image():
     
 @app.route('/upload_image', methods=['POST'])
 def upload_image():
+    global filepath
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'}), 400
     file = request.files['file']
@@ -91,6 +72,7 @@ def upload_image():
         return jsonify({'error': 'No selected file'}), 400
     filepath = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(filepath)
+    return jsonify({'success': True, 'message': 'File uploaded successfully'}), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
